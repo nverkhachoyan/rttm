@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-// Import pool from config
 import pool from './database/config.js';
+
 const createTables = `
 BEGIN;
 
@@ -80,10 +80,8 @@ COMMIT;
 pool.query(createTables, (err, res) => {
   if (err) {
     console.error('Error executing query', err.stack);
-    // Handle error as needed
   } else {
     console.log('Tables created successfully', res);
-    // Proceed with any further setup
   }
   pool.end();
 });

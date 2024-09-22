@@ -1,13 +1,13 @@
 services:
   backend:
     build:
-      context: .  # Your Dockerfile is in the root
+      context: .
     ports:
-      - "3008:3008"  # Backend Node.js API
+      - "3008:3008"
     depends_on:
       - db
     environment:
-      - DATABASE_URL=postgres://jim2:rttm@db:5432/RTTM  # Update to match your db config
+      - DATABASE_URL=postgres://jim2:rttm@db:5432/RTTM
       - DB_USER=jim2
       - DB_PASSWORD=rttm
       - DB_NAME=RTTM
