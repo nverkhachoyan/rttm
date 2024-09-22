@@ -21,183 +21,108 @@
 
 Vehicle detection is crucial for analyzing traffic flow data to enhance planning in intelligent transportation systems. Machine Learning technology has increasingly been utilized for vehicle detection in both 2D real-time traffic flow videos and 3D point clouds. However, adverse weather conditions such as fog, rain, snow, extreme wind, and others pose challenges for 2D vehicle detection. 3D LiDAR point clouds offer more resistance to these conditions. While much research on 3D vehicle detection has focused on autonomous driving with LiDAR cameras on vehicles, there is a research gap in real-time vehicle detection for intelligent transportation with stationary LiDAR cameras on highways/freeways. This project aims to develop a system that collects real-time traffic flow data through 3D LiDAR cameras, processes the data for vehicle detection and classification, and provides a web-based service that enables real-time vehicle tracking, classification, and statistical traffic flow data visualization.
 
-## Built With
-
+## Frontend
 - React
 - Bootstrap
+
+## Backend
+- Node.js
+- Express
+- PostgreSQL
+
+## Containerization:
+- Docker
+- Docker Compose
+
+## Other Technologies:
+- Firebase
+- Python
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js
-- Firebase
+Before you begin, ensure you have met the following requirements:
 
-### Installation
+- Docker Desktop installed on your macOS. Download it from [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+- Git installed on your machine.
 
-#### Quick Setup Guide
+#### Quick Setup with Docker
 
-This guide is designed to help developers quickly set up their project environment and database. Ensure all prerequisites listed in the "Getting Started" section are completed before proceeding.
+Follow these steps to set up and run the RTTM system using Docker and Docker Compose.
 
-##### Prerequisites
+1. **Clone the Repository:**
 
-- Python 3
-- PostgreSQL
-- Command line access
-
-## Database Setup
-
-This section provides a detailed guide for setting up the PostgreSQL database for the RTTM system.
-
-### Prerequisites
-- PostgreSQL 14.12 or higher (installed via Homebrew on macOS)
-- Command line access
-- User account with sudo privileges
-
-### Steps
-
-1. **Start PostgreSQL**
-   Ensure your PostgreSQL server is running. On macOS with Homebrew installation, use:
-   ```
-   brew services start postgresql@14
-   ```
-   If it's already running and you need to restart:
-   ```
-   brew services restart postgresql@14
+   ```bash
+   git clone https://github.com/CalTransProject/rttm.git
    ```
 
-2. **Create the RTTM Database**
-   Connect to PostgreSQL as the superuser. On macOS, this is typically your system username:
-   ```
-   psql postgres
-   ```
-   
-   Once connected, create the RTTM database:
-   ```sql
-   CREATE DATABASE "RTTM";
+2. **Navigate to the backend API directory:**
+
+   ```bash
+   cd rttm/backend/api
    ```
 
-3. **Create and Configure User**
-   Still in the PostgreSQL prompt, create the 'jim2' user if it doesn't exist and grant necessary privileges:
-   ```sql
-   CREATE USER jim2 WITH PASSWORD 'rttm';
-   ALTER USER jim2 WITH CREATEDB;
-   GRANT ALL PRIVILEGES ON DATABASE "RTTM" TO jim2;
+3. **Make sure Docker Desktop is running:**
+
+   Make sure the Docker Desktop application is running.
+
+4. **Build and Start the Containers:**
+
+   Use Docker Compose to build and start all the necessary services.
+
+   ```bash
+   docker-compose up --build
    ```
 
-4. **Connect to the RTTM Database**
-   Exit the current session and connect to the RTTM database as jim2:
+   This command will:
+
+   - Build Docker images for the frontend, backend, and other services.
+   - Start PostgreSQL, the backend server, the frontend application, and any other defined services.
+   - Set up networks and volumes as specified in the `docker-compose.yml` file.
+
+5. **Install and run the frontend**
+
+   At this point, we have setup the backend through Docker, and all we need to do is run the frontend. **Navigate to the frontend directory** and run this command.
+
+   ```bash
+   npm install
    ```
-   \q
-   psql -U jim2 -h localhost -d RTTM
+
+   and then 
+
+   ```bash
+   npm start
    ```
-   Enter the password ('rttm') when prompted.
 
-5. **Initialize Database Schema**
-   Once connected to the RTTM database, run the initialization script:
+6. **Access the Application:**
+
+   Once all services are up and running, you can access the RTTM web application by navigating to `http://localhost:3000` in your web browser.
+
+
+#### Running the Application
+
+With Docker Compose handling the setup, running the application is straightforward.
+
+1. **Start All Services:**
+
+   ```bash
+   docker-compose up
    ```
-   \i website/scriptsServer/init-db.sql
+
+   To run in detached mode (in the background):
+
+   ```bash
+   docker-compose up -d
    ```
-   Note: Ensure you're in the correct directory where the init-db.sql file is located, or provide the full path to the file.
 
-6. **Verify Database Creation**
-   After running the initialization script, you can verify the table creation:
+2. **Stopping the Services:**
+
+   To stop all running containers:
+
+   ```bash
+   docker-compose down
    ```
-   \dt
-   ```
-   This should display a list of tables including:
-   - FramePrediction
-   - HistoricalData
-   - HistoricalData_LaneVehicleCount
-   - HistoricalData_VehicleTypeCount
-   - Lane
-   - ModifiedVehicle
-   - Real_Time_Traffic_Data
-   - User
-   - VehicleDetectionEvent
-   - VehicleHistory
-   - VehicleType
-   - Weather
-
-### Troubleshooting
-
-- If you encounter permission issues, ensure the 'jim2' user has been created and granted appropriate permissions.
-- If the init-db.sql file is not found, check your current directory and file path.
-- For any connection issues, verify that PostgreSQL is running and that you're using the correct host, port, and credentials.
-
-Remember to keep your database credentials secure and never commit them to version control.
-
-#### Environment Preparation
-
-1. Navigate to the website directory:
-
-```bash
-cd website
-```
-
-2. Execute scripts to set up the environment:
-
-- Generate the initial data frame:
-
-```bash
-python 3DGenerateDataFrameMod.py
-```
-
-- Populate the database:
-
-Run the following scripts in sequence:
-
-```bash
-python ProcessAggregatedData.py
-python ProcessPerSecondData.py
-python ProcessPerMinuteData.py
-python ProcessPerHourData.py
-python ProcessPerDayData.py
-python ProcessPerWeekData.py
-python ProcessPerMonthData.py
-python ProcessPerYearData.py
-```
-
-After running these scripts, proceed with the server setup.
-
-3. Start the server:
-
-Navigate to the `scriptsServer` directory and run the server:
-
-```bash
-cd scriptsServer
-node server.js
-```
-
-4. Start the frontend:
-
-Open a new terminal, navigate to the `website` directory, and run:
-
-```bash
-npm start
-```
-
-### Running the Scripts/Datapoints Server
-
-To start the scripts server, follow these steps:
-
-1. Navigate to the server directory:
-
-```bash
-cd website/scriptsServer
-```
-
-2. Install dependencies using Yarn:
-
-```bash
-yarn add express dotenv bcrypt cors express-validator jsonwebtoken pg
-```
-
-3. Start the server:
-
-```bash
-node server.js
-```
 
 ### Running the 2D Camera Server
 
@@ -211,32 +136,6 @@ cd website/scriptsServer
 
 ```bash
 python server2DCamera.py
-```
-
-### Running the Application
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/CalTransProject/rttm.git
-```
-
-2. Install packages:
-
-```bash
-npm install
-```
-
-3. Navigate into the website directory:
-
-```bash
-cd website
-```
-
-4. Start the web server:
-
-```bash
-npm start
 ```
 
 ## Default Login Credentials
