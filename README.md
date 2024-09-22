@@ -30,11 +30,11 @@ Vehicle detection is crucial for analyzing traffic flow data to enhance planning
 - Express
 - PostgreSQL
 
-## Containerization:
+## Containerization
 - Docker
 - Docker Compose
 
-## Other Technologies:
+## Other Technologies
 - Firebase
 - Python
 
@@ -77,8 +77,8 @@ Follow these steps to set up and run the RTTM system using Docker and Docker Com
 
    This command will:
 
-   - Build Docker images for the frontend, backend, and other services.
-   - Start PostgreSQL, the backend server, the frontend application, and any other defined services.
+   - Build Docker images for the backend, and other services.
+   - Start PostgreSQL and the backend server
    - Set up networks and volumes as specified in the `docker-compose.yml` file.
 
 5. **Install and run the frontend**
